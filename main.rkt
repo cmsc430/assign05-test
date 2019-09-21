@@ -13,5 +13,5 @@
  (interp '(let ((x 1)) x)))
 
 (check-equal?
- (parse (lex-string "(let ((x 1)) x))"))
+ (parse (lex-string "#lang racket (let ((x 1)) x))"))
  '(let ((x 1)) x))
