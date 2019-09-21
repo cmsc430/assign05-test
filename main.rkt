@@ -4,9 +4,9 @@
          rackunit)
 
 ;; Code for submission needs to be in ".." directory
-(require "../compile.rkt"
-         "../parse.rkt"
-         "../lex.rkt")
+(require (only-in "../compile.rkt" compile)
+         (only-in "../parse.rkt" parse)
+         (only-in "../lex.rkt" lex-string))
 
 (check-equal?
  (asm-interp (compile '(let ((x 1)) x)))
