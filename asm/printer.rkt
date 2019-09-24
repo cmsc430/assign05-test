@@ -46,7 +46,7 @@
 ;; Any -> Boolean
 (define (reg? x)
   (and (symbol? x)
-       (memq x '(rax rbx rsp))))
+       (memq x '(rax rbx rsp rdi))))
 
 ;; Reg -> String
 (define (reg->string r)
