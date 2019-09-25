@@ -1,7 +1,7 @@
 #lang racket
 (provide (all-defined-out))
 (require "printer.rkt" racket/runtime-path)
-(define-runtime-path dir "..")
+(define-runtime-path dir "../..") ; use student's Makefile and run-time system
 
 ;; Asm -> Integer
 ;; Interpret (by assemblying, linking, and exec'ing) x86-64 code
