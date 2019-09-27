@@ -139,7 +139,5 @@
   (check-true (closed? p)))
 
 (for ([p parses])
-  (check-not-exn (lambda () (compile p)))
-  (check-not-exn (lambda () (asm-interp (compile p))))
   (check-equal? (asm-interp (compile p))
                 (interp p)))
