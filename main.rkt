@@ -140,4 +140,5 @@
 
 (for ([p parses])
   (check-equal? (asm-interp (compile p))
-                (interp p)))
+                (interp p)
+                p))
