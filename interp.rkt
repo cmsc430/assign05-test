@@ -82,6 +82,7 @@
   (match (cons p as)
     [(list p (? value?) ... 'err _ ...) 'err]
     [(list '- (? integer? i0)) (- i0)]
+    [(list '- (? integer? i0) (? integer? i1)) (- i0 i1)]
     [(list 'abs (? integer? i0)) (abs i0)]
     [(list 'add1 (? integer? i0)) (+ i0 1)]
     [(list 'sub1 (? integer? i0)) (- i0 1)]
@@ -102,7 +103,7 @@
     [(list 'box v0) (box v0)]
     [(list 'unbox (? box? v0)) (unbox v0)]
     [(list 'string-length (? string? v0)) (string-length v0)]
-    [(list 'make-string (? char? v0) (? natural? v1)) (make-string v0 v1)]
+    [(list 'make-string (? natural? v0) (? char? v1)) (make-string v0 v1)]
     [(list 'string-ref (? string? v0) (? natural? v1))
      (if (< v1 (string-length v0))
          (string-ref v0 v1)
