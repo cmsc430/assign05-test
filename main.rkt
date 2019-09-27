@@ -1,15 +1,14 @@
 #lang racket
 (require "interp.rkt"
-         "asm/interp.rkt" ; means students can't add to their own asm
          rackunit)
 
 (define (read-prog p)
   (regexp-match "^#lang racket" p)
-  ;(read-line p)
   (read p))
 
 ;; Code for submission needs to be in ".." directory
 (require (only-in "../compile.rkt" compile)
+         (only-in "../asm/interp.rkt" asm-interp)
          (only-in "../parse.rkt" parse)
          (only-in "../syntax.rkt" expr? closed?)
          (only-in "../lex.rkt" lex-string lex-port))
@@ -132,11 +131,12 @@
 
 (for ([t tokens]
       [p parses])
+  (check-not-exn (lambda () (parse t)) t)
   (check-equal? (parse t) p))
 
 (for ([p parses])
-  (check-true (expr? p))
-  (check-true (closed? p)))
+  (check-true (and (expr? p)
+                   (closed? p))))
 
 (for ([p parses])
   (check-equal? (asm-interp (compile p))
