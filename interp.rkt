@@ -67,7 +67,7 @@
 (define (prim? x)
   (and (symbol? x)
        (memq x '(add1 sub1 zero? abs - char? boolean? integer? integer->char char->integer
-                      string? box? empty? cons? box unbox car cdr string-length
+                      string? box? empty? cons cons? box unbox car cdr string-length
                       make-string string-ref = < <= char=? boolean=? +))))
 
 ;; Any -> Boolean
@@ -100,6 +100,7 @@
     [(list 'box? v0) (box? v0)]
     [(list 'empty? v0) (empty? v0)]
     [(list 'cons? v0) (cons? v0)]
+    [(list 'cons v0 v1) (cons v0 v1)]
     [(list 'box v0) (box v0)]
     [(list 'unbox (? box? v0)) (unbox v0)]
     [(list 'string-length (? string? v0)) (string-length v0)]
