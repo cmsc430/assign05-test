@@ -13,12 +13,22 @@
                     (symbol->string o) " "
                     (arg->string a1) ", "
                     (arg->string a2) "\n")]    
+    [`(,(? opcode3? o) ,a1 ,a2 ,a3)
+     (string-append "\t"
+                    (symbol->string o) " "
+                    (arg->string a1) ", "
+                    (arg->string a2) ", "
+                    (arg->string a3) "\n")]    
     [`(jmp ,l)
      (string-append "\tjmp " (label->string l) "\n")]
     [`(je ,l)
      (string-append "\tje " (label->string l) "\n")]
     [`(jle ,l)
      (string-append "\tjle " (label->string l) "\n")]
+    [`(jl ,l)
+     (string-append "\tjl " (label->string l) "\n")]
+    [`(jg ,l)
+     (string-append "\tjg " (label->string l) "\n")]
     [`(jge ,l)
      (string-append "\tjge " (label->string l) "\n")]
     [`(jne ,l)
@@ -26,6 +36,8 @@
     [`ret "\tret\n"]
     [`(neg ,a1)
      (string-append "\tneg " (arg->string a1) "\n")]
+    [`(not ,a1)
+     (string-append "\tnot " (arg->string a1) "\n")]
     [`(call ,l)
      (string-append "\tcall " (label->string l) "\n")]
     [`(push ,r)
@@ -33,7 +45,10 @@
     [l (string-append (label->string l) ":\n")]))
 
 (define (opcode2? x)
-  (memq x '(mov add sub cmp and cmovl xor sal sar)))
+  (memq x '(mov add sub cmp and cmovl xor or sal sar)))
+
+(define (opcode3? x)
+  (memq x '(shld shrd)))
 
 ;; Arg -> String
 (define (arg->string a)
@@ -46,7 +61,7 @@
 ;; Any -> Boolean
 (define (reg? x)
   (and (symbol? x)
-       (memq x '(rax rbx rsp rdi))))
+       (memq x '(rax rbx rcx rsp rdi))))
 
 ;; Reg -> String
 (define (reg->string r)
