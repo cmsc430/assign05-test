@@ -1,6 +1,9 @@
 #lang racket
 (provide (all-defined-out))
 
+;; Your assignment code must be in the `..` directory
+(require "../ast.rkt")
+
 ;; type Value =
 ;; | Integer
 ;; | Boolean
@@ -20,27 +23,27 @@
 ;; Expr REnv -> Answer
 (define (interp-env e r)
   (match e
-    [(? value? v) v]
-    [''() '()]
-    [(list (? prim? p) es ...)
+    [(? value? v) (get-val v)]
+    [(nil-e) '()]
+    [(prim-e (? prim? p) es)
      (let ((as (interp-env* es r)))
        (interp-prim p as))]    
-    [`(if ,e0 ,e1 ,e2)
+    [(if-e e0 e1 e2)
      (match (interp-env e0 r)
        ['err 'err]
        [v
         (if v
             (interp-env e1 r)
             (interp-env e2 r))])]
-    [(? symbol? x)
+    [(var-e x)
      (lookup r x)]
-    [`(let ,(list `(,xs ,es) ...) ,e)
-     (match (interp-env* es r)
+    [(let-e bs body)
+     (match (interp-env* (get-defs bs) r)
        ['err 'err]
        [vs
-        (interp-env e (append (zip xs vs) r))])]
-    [(list 'cond cs ... `(else ,en))
-     (interp-cond-env cs en r)]))
+        (interp-env body (append (zip (get-vars bs) vs) r))])]
+    [(cond-e cs el)
+     (interp-cond-env cs el r)]))
 
 ;; (Listof Expr) REnv -> (Listof Value) | 'err
 (define (interp-env* es r)
@@ -55,7 +58,7 @@
 (define (interp-cond-env cs en r)
   (match cs
     ['() (interp-env en r)]
-    [(cons `(,eq ,ea) cs)
+    [(cons (clause eq ea) cs)
      (match (interp-env eq r)
        ['err 'err]
        [v
@@ -72,10 +75,18 @@
 
 ;; Any -> Boolean
 (define (value? x)
-  (or (integer? x)
-      (boolean? x)
-      (char? x)
-      (string? x)))
+  (or (int-e? x)
+      (bool-e? x)
+      (char-e? x)
+      (string-e? x)))
+
+;; Expr -> Value
+(define (get-val v)
+  (match v
+    [(int-e x) x]
+    [(bool-e x) x]
+    [(char-e x) x]
+    [(string-e x) x]))
 
 ;; Prim (Listof Answer) -> Answer
 (define (interp-prim p as)
