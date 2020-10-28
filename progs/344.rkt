@@ -1,3 +1,3 @@
 #lang racket
-(cond [(string? (make-string #\a 0)) #t]
+(cond [(string? (make-string 0 #\a)) #t]
       [else #f])

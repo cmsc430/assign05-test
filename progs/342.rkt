@@ -1,3 +1,3 @@
 #lang racket
 (let ((x #\c))
-  (make-string x 10))
+  (make-string 10 x))
