@@ -1,2 +1,2 @@
 #lang racket
-(char=? (string-ref (make-string 100 #\q) 99) #\q)
+(char=? (string-ref (make-string #\q 100) 99) #\q)
