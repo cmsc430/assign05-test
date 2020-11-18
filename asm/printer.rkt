@@ -21,6 +21,8 @@
                     (arg->string a3) "\n")]    
     [`(jmp ,l)
      (string-append "\tjmp " (label->string l) "\n")]
+    [`(loop ,l)
+     (string-append "\tloop " (label->string l) "\n")]
     [`(je ,l)
      (string-append "\tje " (label->string l) "\n")]
     [`(jle ,l)
@@ -45,7 +47,7 @@
     [l (string-append (label->string l) ":\n")]))
 
 (define (opcode2? x)
-  (memq x '(mov add sub cmp and cmovl xor or sal sar)))
+  (memq x '(mov add imul sub cmp and cmovl xor or sal sar)))
 
 (define (opcode3? x)
   (memq x '(shld shrd)))
@@ -61,7 +63,7 @@
 ;; Any -> Boolean
 (define (reg? x)
   (and (symbol? x)
-       (memq x '(rax rbx rcx rsp rdi))))
+       (memq x '(rax rbx rcx rdx rsp rdi))))
 
 ;; Reg -> String
 (define (reg->string r)
